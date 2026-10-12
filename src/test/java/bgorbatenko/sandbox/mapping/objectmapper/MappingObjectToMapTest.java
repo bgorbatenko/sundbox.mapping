@@ -135,6 +135,29 @@ public class MappingObjectToMapTest {
 
     @SneakyThrows
     @Test
+    void mappingObjectToMapTest() {
+        // Преобразование Object в Map
+
+        // given
+        var testObject = new MappingTestRootClass()
+                .setParam1("value1")
+                .setParam2(new MappingTestSubClass()
+                        .setParam1("value2_1")
+                        .setParam2("value2_2"));
+        var expectedMap = Map.of("param1", "value1",
+                "param2", Map.of("param1", "value2_1", "param2", "value2_2"));
+
+        // when
+        var actualMap = objectMapper.convertValue(testObject, new TypeReference<Map<String, Object>>() {
+        });
+
+        // then
+        assertEquals(expectedMap, actualMap);
+    }
+
+
+    @SneakyThrows
+    @Test
     void safeMapTransferViaJsonTest() {
         // Демонстрирует сохранность структуры Map после преобразования в Json и обратно
         // Однако, следует учесть, что информация о типах при сериализации в JSON будет потеряна.
